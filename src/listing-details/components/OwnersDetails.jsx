@@ -6,13 +6,14 @@ import { useNavigate } from "react-router-dom";
 function OwnersDetails({ carDetail }) {
   const { user } = useUser();
 
-  const navigation=useNavigate()
+  const navigation = useNavigate();
+
+  
   const onMessageOwnerButtonClick = async () => {
     const userId = user?.primaryEmailAddress?.emailAddress.split("@")[0];
-    const ownerUserId=carDetail?.createdBy.split('@')[0]
+    const ownerUserId = carDetail?.createdBy.split("@")[0];
     // current user id
     try {
-     
       await Service.CreateSendBirdUser(
         userId,
         user?.fullName,
@@ -25,24 +26,27 @@ function OwnersDetails({ carDetail }) {
     }
     // owner user id
     try {
-      
-      await Service.CreateSendBirdUser(ownerUserId,carDetail?.userName,carDetail?.userImageUrl
+      await Service.CreateSendBirdUser(
+        ownerUserId,
+        carDetail?.userName,
+        carDetail?.userImageUrl
       ).then((resp) => {
         console.log(resp);
       });
     } catch (error) {
-      console.log(e)
+      console.log(error);
     }
     //create  channel
     try {
-      await Service.CreateSendBirdChannel([userId,ownerUserId],carDetail?.listingTitle)
-      .then(resp=>{
-        console.log(resp)
-        navigation('/profile')
-      })
-    } 
-    catch (error) {
-      console.log(error)
+      await Service.CreateSendBirdChannel(
+        [userId, ownerUserId],
+        carDetail?.listingTitle
+      ).then((resp) => {
+        console.log(resp);
+        navigation("/profile");
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
   return (
